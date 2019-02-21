@@ -9,7 +9,7 @@ This example provide API to list, get, create, update, delete customers with the
 
 High level design: 
 1. Provides 5 apis (list, show, update, create, delete)
-2. APIs access is prtected by Oauth2 authentication. Authorication server is seperated. So the system contains 2 microservies with Spring Boot. So that the authorication service will be used by other microservies as well. 
+2. APIs access is prtected by Oauth2 authentication. Authorication server is seperated (One runable auth server is https://github.com/dorjear/oauth-server) . So the system contains 2 microservies with Spring Boot. So that the authorication service will be used by other microservies as well. 
 3. API contract is defined by swagger generated from the controller. The swagger can be access with a basic authentication (username and password are both "swagger")
 4. Only users with admin group can access list/create/delete. Customer can access show/update on their own profile. 
 5. Currently customer profile is stored in DB (in-memory) and is going to integration a downstream CRM system with restful webservices. The implementaion will be marked as TODO
