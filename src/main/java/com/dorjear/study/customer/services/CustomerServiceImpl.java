@@ -1,5 +1,9 @@
 package com.dorjear.study.customer.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +23,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Iterable<Customer> listAllCustomers() {
+    public List<Customer> listAllCustomers() {
         logger.debug("listAllCustomers called");
-        return customerRepository.findAll();
+        return StreamSupport.stream(customerRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
     @Override

@@ -1,10 +1,11 @@
 package com.dorjear.study.customer.services;
 
+import java.util.List;
 
 import com.dorjear.study.customer.domain.Customer;
 
 public interface CustomerService {
-    Iterable<Customer> listAllCustomers();
+    List<Customer> listAllCustomers();
 
     Customer getCustomerById(Integer id);
 
