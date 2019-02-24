@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
+import java.util.stream.StreamSupport;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,10 +57,6 @@ public class CustomerRepositoryTest {
         assertEquals(customerCount, 1);
         //get all customers, list should only have one
         Iterable<Customer> customers = customerRepository.findAll();
-        int count = 0;
-        for(Customer p : customers){
-            count++;
-        }
-        assertEquals(count, 1);
+        assertEquals(1, StreamSupport.stream(customers.spliterator(), false).count());
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.dorjear.study.customer.domain.Customer;
@@ -20,10 +19,12 @@ import com.dorjear.study.customer.domain.Customer;
  * 
  */
 
-@Service("customerServiceRestful")
+//@Service("customerServiceRestful")
 public class CustomerServiceRestfulImpl implements CustomerService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    
     private RestTemplate restTemplate;
+    
     @Value("${crms.listUrl}")
     private String listUrl;
     @Value("${crms.detailUrl}")
