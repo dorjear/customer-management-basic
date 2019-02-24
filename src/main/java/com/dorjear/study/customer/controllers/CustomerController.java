@@ -7,6 +7,8 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,9 +49,16 @@ public class CustomerController {
 
     @ApiOperation(value = "Search a customer with an ID", response = Customer.class)
     @RequestMapping(value = "/show/{id}", method = RequestMethod.GET, produces = "application/json")
-    public Customer showcustomer(@PathVariable Integer id, Model model) {
+    public Customer showcustomer(@PathVariable Integer id, Authentication authentication) {
         Customer customer = customerService.getCustomerById(id);
+        verify(authentication, customer);
         return customer;
+    }
+
+    private void verify(Authentication authentication, Customer customer) {
+        if(authentication == null || customer==null) return;
+        String userDetails = (String) authentication.getPrincipal();
+        if(authentication.getAuthorities().stream().filter(auth -> "ROLE_ADMIN".equals(auth.getAuthority())).count()==0 && !customer.getCustomerId().equals(userDetails)) throw new AuthorizationServiceException("Not authorized");
     }
 
     @ApiOperation(value = "Add a customer")
@@ -61,8 +70,9 @@ public class CustomerController {
 
     @ApiOperation(value = "Update a customer")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT, produces = "application/json")
-    public ResponseEntity<String> updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
+    public ResponseEntity<String> updateCustomer(@PathVariable Integer id, @RequestBody Customer customer, Authentication authentication) {
         Customer storedCustomer = customerService.getCustomerById(id);
+        verify(authentication, storedCustomer);
         storedCustomer.setFirstName(customer.getFirstName());
         storedCustomer.setLastName(customer.getLastName());
         storedCustomer.setDateOfBirth(customer.getDateOfBirth());
